@@ -84,14 +84,6 @@ def applyDT2(p1, p2, pred2, p3, pred3, x, y):
     q = p3[0]
     w = p3[1]
 
-    if pred2==3:
-        n2 = 8
-    else:
-        n2 = 3
-    if pred3==3:
-        n3 = 8
-    else:
-        n3 = 3
     for z in range(0,200):
         if x[j,i,z] == 1:
             if x[t,r,z] == 1:
