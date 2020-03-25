@@ -24,6 +24,13 @@ def todict(matobj):
 def loadmat(path):
     return todict(spio.loadmat(path, struct_as_record=False, squeeze_me=True)['data'])
 
+def accuracy(y, pred):
+    count = 0.0
+    for i in range(0,200):
+        if pred[i] == y[i]:
+            count += 1
+    accuracy = (count / 200.0)
+    return accuracy
 
 def scoreFeatures(x, y):
     score = np.zeros((28,28)).astype(int)
@@ -67,12 +74,8 @@ def applyDT1(p, pred, x, y):
             predictions.append(pred)
         else:
             predictions.append(n)
-    count = 0.0
-    for k in range(0,200):
-        if predictions[k] == y[k]:
-            count += 1
-    accuracy = (count / 200.0)
-    return accuracy
+    acc = accuracy(y, predictions)
+    return acc
 
 
 def applyDT2(p1, p2, pred2, p3, pred3, x, y):
@@ -95,13 +98,8 @@ def applyDT2(p1, p2, pred2, p3, pred3, x, y):
                 predictions.append(8)
             else:
                 predictions.append(3)
-    count = 0.0
-    for k in range(0,200):
-        if predictions[k] == y[k]:
-            count += 1
-    accuracy = (count / 200.0)
-    return accuracy
-
+    acc = accuracy(y, predictions)
+    return acc
 
 #Function test
 if __name__ == '__main__':
@@ -111,8 +109,8 @@ if __name__ == '__main__':
     x1 = data["test"]["x"]
     y1 = data["test"]["y"]
     score1,pred1 = scoreFeatures(x,y)
-    # plt.imshow(score1, cmap='gray')
-    # plt.show()
+    plt.imshow(score1, cmap='gray')
+    plt.show()
 
     a = np.max(score1)
     (i,j) = (np.where(score1 == a)[1][0], (np.where(score1 == a)[0][0]))
