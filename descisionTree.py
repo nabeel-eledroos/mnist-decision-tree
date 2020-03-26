@@ -57,40 +57,32 @@ def scoreFeatures(x, y):
                     pred[i,j] = 8
     return score, pred
 
-
 def applyDT1(p, pred, x, y):
     predictions = []
-    i = p[0]
-    j = p[1]
     pred_opp = (pred-5)%10
     for n in range(0,200):
-        if x[j,i,n] == 1:
+        if x[p[1],p[0],n] == 1:
             predictions.append(pred)
         else:
             predictions.append(pred_opp)
     acc = accuracy(y, predictions)
     return acc
 
-
 def applyDT2(p1, p2, pred2, p3, pred3, x, y):
     predictions = []
-    i = p1[0]
-    j = p1[1]
-    r = p2[0]
-    t = p2[1]
-    q = p3[0]
-    w = p3[1]
+    pred2_opp = (pred2-5)%10
+    pred3_opp = (pred3-5)%10
     for z in range(0,200):
-        if x[j,i,z] == 1:
-            if x[t,r,z] == 1:
-                predictions.append(3)
+        if x[p1[1],p1[0],z] == 1:
+            if x[p2[1],p2[0],z] == 1:
+                predictions.append(pred2)
             else:
-                predictions.append(8)
+                predictions.append(pred2_opp)
         else:
-            if x[w,q,z] == 1:
-                predictions.append(8)
+            if x[p3[1],p3[0],z] == 1:
+                predictions.append(pred3)
             else:
-                predictions.append(3)
+                predictions.append(pred3_opp)
     acc = accuracy(y, predictions)
     return acc
 
@@ -107,9 +99,10 @@ if __name__ == '__main__':
 
     a = np.max(score1)
     (i,j) = (np.where(score1 == a)[1][0], (np.where(score1 == a)[0][0]))
+    print(np.where(score1 == a))
     print(i,j)
 
-    testDepth1 = applyDT1((i,j), pred1[i,j], x1, y1)
+    testDepth1 = applyDT1((i,j), pred1[j, i], x1, y1)
     print(testDepth1)
 
     ind1 = np.where(x[j,i,:]==1)
@@ -122,12 +115,12 @@ if __name__ == '__main__':
     sub2y = y[ind2[0]]
 
     score2,pred2 = scoreFeatures(sub1x,sub1y)
-    score3,pred3 = scoreFeatures(sub2x,sub2y)
 
     b = np.max(score2)
     (r,t) = (np.where(score2 == b)[1][0], (np.where(score2 == b)[0][0]))
     print(r,t)
 
+    score3,pred3 = scoreFeatures(sub2x,sub2y)
     c = np.max(score3)
     (q,w) = (np.where(score3 == c)[1][0], (np.where(score3 == c)[0][0]))
     print(q,w)
@@ -135,5 +128,5 @@ if __name__ == '__main__':
     p1 = (i,j)
     p2 = (r,t)
     p3 = (q,w)
-    testDepth2 = applyDT2(p1, p2, pred2[r,t], p3, pred3[q,w], x1, y1)
+    testDepth2 = applyDT2(p1, p2, pred2[t, r], p3, pred3[w, q], x1, y1)
     print(testDepth2)
