@@ -29,8 +29,7 @@ def accuracy(y, pred):
     for i in range(0,200):
         if pred[i] == y[i]:
             count += 1
-    accuracy = (count / 200.0)
-    return accuracy
+    return (count / 200.0)
 
 def scoreFeatures(x, y):
     score = np.zeros((28,28)).astype(int)
@@ -39,8 +38,6 @@ def scoreFeatures(x, y):
         for j in range(0, 28):
                 sc1 = 0.0
                 sc2 = 0.0
-                sc3 = 0.0
-                sc4 = 0.0
                 for k in range(0,x.shape[2]):
                     if x[i,j,k] == 1:
                         if y[k] == 3:
@@ -49,14 +46,14 @@ def scoreFeatures(x, y):
                             sc2 += 1
                     else:
                         if y[k] == 3:
-                            sc3 += 1
+                            sc2 += 1
                         else:
-                            sc4 += 1
-                if(sc1+sc4>sc2+sc3):
-                    score[i,j] = sc1+sc4
+                            sc1 += 1
+                if(sc1>sc2):
+                    score[i,j] = sc1
                     pred[i,j] = 3
                 else:
-                    score[i,j] = sc2+sc3
+                    score[i,j] = sc2
                     pred[i,j] = 8
     return score, pred
 
@@ -65,15 +62,12 @@ def applyDT1(p, pred, x, y):
     predictions = []
     i = p[0]
     j = p[1]
-    if pred==3:
-        n = 8
-    else:
-        n = 3
-    for z in range(0,200):
-        if x[j,i,z] == 1:
+    pred_opp = (pred-5)%10
+    for n in range(0,200):
+        if x[j,i,n] == 1:
             predictions.append(pred)
         else:
-            predictions.append(n)
+            predictions.append(pred_opp)
     acc = accuracy(y, predictions)
     return acc
 
@@ -86,7 +80,6 @@ def applyDT2(p1, p2, pred2, p3, pred3, x, y):
     t = p2[1]
     q = p3[0]
     w = p3[1]
-
     for z in range(0,200):
         if x[j,i,z] == 1:
             if x[t,r,z] == 1:
@@ -109,8 +102,8 @@ if __name__ == '__main__':
     x1 = data["test"]["x"]
     y1 = data["test"]["y"]
     score1,pred1 = scoreFeatures(x,y)
-    plt.imshow(score1, cmap='gray')
-    plt.show()
+    # plt.imshow(score1, cmap='gray')
+    # plt.show()
 
     a = np.max(score1)
     (i,j) = (np.where(score1 == a)[1][0], (np.where(score1 == a)[0][0]))
