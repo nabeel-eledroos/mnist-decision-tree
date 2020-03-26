@@ -13,16 +13,9 @@ def todict(matobj):
             dict[strg] = elem
     return dict
 
-
-#data.mat is a dict with the following structure:
-#   {train:
-#       {x: array with raw data (image height, image width, number of images)}
-#       {y: array with corresponding labels}},
-#   {test:
-#       {x: array with raw data (image height, image width, number of images)}
-#       {y: array with corresponding labels}}
 def loadmat(path):
-    return todict(spio.loadmat(path, struct_as_record=False, squeeze_me=True)['data'])
+    data = todict(spio.loadmat(path, struct_as_record=False, squeeze_me=True)['data'])
+    return data["train"]["x"], data["train"]["y"], data["test"]["x"], data["test"]["y"]
 
 def accuracy(y, pred):
     count = 0.0
@@ -88,45 +81,40 @@ def applyDT2(p1, p2, pred2, p3, pred3, x, y):
 
 #Function test
 if __name__ == '__main__':
-    data = loadmat('data.mat')
-    x = data["train"]["x"]
-    y = data["train"]["y"]
-    x1 = data["test"]["x"]
-    y1 = data["test"]["y"]
-    score1,pred1 = scoreFeatures(x,y)
+    x_train, y_train, x_test, y_test = loadmat('data.mat')
+    score1,pred1 = scoreFeatures(x_train, y_train)
     # plt.imshow(score1, cmap='gray')
     # plt.show()
 
     a = np.max(score1)
     (i,j) = (np.where(score1 == a)[1][0], (np.where(score1 == a)[0][0]))
-    print(np.where(score1 == a))
-    print(i,j)
+    p1 = (i,j)
+    print(p1)
 
-    testDepth1 = applyDT1((i,j), pred1[j, i], x1, y1)
+    testDepth1 = applyDT1((i,j), pred1[j, i], x_test, y_test)
     print(testDepth1)
 
-    ind1 = np.where(x[j,i,:]==1)
-    ind2 = np.where(x[j,i,:]==0)
+    ind1 = np.where(x_train[j,i,:]==1)
+    ind2 = np.where(x_train[j,i,:]==0)
 
-    sub1x = x[:,:,ind1[0]]
-    sub1y = y[ind1[0]]
+    sub1x = x_train[:,:,ind1[0]]
+    sub1y = y_train[ind1[0]]
 
-    sub2x = x[:,:,ind2[0]]
-    sub2y = y[ind2[0]]
+    sub2x = x_train[:,:,ind2[0]]
+    sub2y = y_train[ind2[0]]
 
     score2,pred2 = scoreFeatures(sub1x,sub1y)
 
     b = np.max(score2)
-    (r,t) = (np.where(score2 == b)[1][0], (np.where(score2 == b)[0][0]))
-    print(r,t)
+    (k,l) = (np.where(score2 == b)[1][0], (np.where(score2 == b)[0][0]))
+    p2 = (k,l)
+    print(p2)
 
     score3,pred3 = scoreFeatures(sub2x,sub2y)
     c = np.max(score3)
-    (q,w) = (np.where(score3 == c)[1][0], (np.where(score3 == c)[0][0]))
-    print(q,w)
+    (m,n) = (np.where(score3 == c)[1][0], (np.where(score3 == c)[0][0]))
+    p3 = (m,n)
+    print(p3)
 
-    p1 = (i,j)
-    p2 = (r,t)
-    p3 = (q,w)
-    testDepth2 = applyDT2(p1, p2, pred2[t, r], p3, pred3[w, q], x1, y1)
+    testDepth2 = applyDT2(p1, p2, pred2[l, k], p3, pred3[n, m], x_test, y_test)
     print(testDepth2)
