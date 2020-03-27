@@ -50,32 +50,44 @@ def scoreFeatures(x, y):
                     pred[i,j] = 8
     return score, pred
 
+# def applyDT(points, pred_vals, depth, x, y, predictions):
+#     if depth = 1:
+
+#         return predictions
+#     i = points[0][1]
+#     j = points[0][0]
+#     for n in range(0,200):
+#         if x[i,j,n] == 1:
+
+# def split():
+
+
 def applyDT1(p, pred, x, y):
-    predictions = []
+    predictions = np.zeros(200)
     pred_opp = (pred-5)%10
     for n in range(0,200):
         if x[p[1],p[0],n] == 1:
-            predictions.append(pred)
+            predictions[n] = pred
         else:
-            predictions.append(pred_opp)
+            predictions[n] = pred_opp
     acc = accuracy(y, predictions)
     return acc
 
 def applyDT2(p1, p2, pred2, p3, pred3, x, y):
-    predictions = []
+    predictions = np.zeros(200)
     pred2_opp = (pred2-5)%10
     pred3_opp = (pred3-5)%10
-    for z in range(0,200):
-        if x[p1[1],p1[0],z] == 1:
-            if x[p2[1],p2[0],z] == 1:
-                predictions.append(pred2)
+    for n in range(0,200):
+        if x[p1[1],p1[0],n] == 1:
+            if x[p2[1],p2[0],n] == 1:
+                predictions[n] = pred2
             else:
-                predictions.append(pred2_opp)
+                predictions[n] = pred2_opp
         else:
-            if x[p3[1],p3[0],z] == 1:
-                predictions.append(pred3)
+            if x[p3[1],p3[0],n] == 1:
+                predictions[n] = pred3
             else:
-                predictions.append(pred3_opp)
+                predictions[n] = pred3_opp
     acc = accuracy(y, predictions)
     return acc
 
@@ -87,6 +99,7 @@ if __name__ == '__main__':
     # plt.show()
 
     a = np.max(score1)
+    print(a)
     (i,j) = (np.where(score1 == a)[1][0], (np.where(score1 == a)[0][0]))
     p1 = (i,j)
     print(p1)
