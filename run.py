@@ -1,9 +1,5 @@
 import scipy.io as spio
-import decisionTree
-from decisionTree import accuracy
-from decisionTree import applyDT
-from decisionTree import scoreFeatures
-from decisionTree import get_point
+from decisionTree import decisionTree
 
 def todict(matobj):
     dict = {}
@@ -22,20 +18,21 @@ def loadmat(path):
 #Function test
 if __name__ == '__main__':
     x_train, y_train, x_test, y_test = loadmat('data.mat')
-    score1,pred1 = scoreFeatures(x_train, y_train)
-    # plt.imshow(score1, cmap='gray')
-    # plt.show()
+    tree = decisionTree()
     pred_vals = {}
     points = []
 
-    (i,j) = get_point(score1)
+
+    score1,pred1 = tree.scoreFeatures(x_train, y_train)
+
+    (i,j) = tree.get_point(score1)
     p1 = (i,j)
     pred_vals[p1] = pred1[j, i]
     points.append(p1)
     print(p1)
 
-    testDepth1 = applyDT(points, pred_vals, 1, x_test, y_test) #applyDT1((i,j), pred1[j, i], x_test, y_test)
-    print(accuracy(y_test, testDepth1))
+    testDepth1 = tree.applyDT(points, pred_vals, 1, x_test, y_test)
+    print(tree.accuracy(y_test, testDepth1))
 
 
     # ind1 = np.where(x_train[j,i,:]==1)
