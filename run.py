@@ -1,4 +1,5 @@
 import scipy.io as spio
+import numpy as np
 from decisionTree import decisionTree
 
 def todict(matobj):
@@ -22,7 +23,6 @@ if __name__ == '__main__':
     pred_vals = {}
     points = []
 
-
     score1,pred1 = tree.scoreFeatures(x_train, y_train)
 
     (i,j) = tree.get_point(score1)
@@ -35,27 +35,34 @@ if __name__ == '__main__':
     print(tree.accuracy(y_test, testDepth1))
 
 
-    # ind1 = np.where(x_train[j,i,:]==1)
-    # ind2 = np.where(x_train[j,i,:]==0)
+    ind1 = np.where(x_train[j,i,:]==1)
+    ind2 = np.where(x_train[j,i,:]==0)
 
-    # sub1x = x_train[:,:,ind1[0]]
-    # sub1y = y_train[ind1[0]]
+    sub1x = x_train[:,:,ind1[0]]
+    sub1y = y_train[ind1[0]]
 
-    # sub2x = x_train[:,:,ind2[0]]
-    # sub2y = y_train[ind2[0]]
+    sub2x = x_train[:,:,ind2[0]]
+    sub2y = y_train[ind2[0]]
 
-    # score2,pred2 = scoreFeatures(sub1x,sub1y)
+    score2,pred2 = tree.scoreFeatures(sub1x,sub1y)
 
-    # b = np.max(score2)
-    # (k,l) = (np.where(score2 == b)[1][0], (np.where(score2 == b)[0][0]))
-    # p2 = (k,l)
-    # print(p2)
+    (k,l) = tree.get_point(score2)
+    p2 = (k,l)
+    pred_vals[p2] = pred2[l, k]
+    points.append(p2)
+    print(p2)
 
-    # score3,pred3 = scoreFeatures(sub2x,sub2y)
-    # c = np.max(score3)
-    # (m,n) = (np.where(score3 == c)[1][0], (np.where(score3 == c)[0][0]))
-    # p3 = (m,n)
-    # print(p3)
 
-    # testDepth2 = applyDT2(p1, p2, pred2[l, k], p3, pred3[n, m], x_test, y_test)
-    # print(testDepth2)
+    score3,pred3 = tree.scoreFeatures(sub2x,sub2y)
+    (m,n) = tree.get_point(score3)
+    p3 = (m,n)
+    pred_vals[p3] = pred3[n, m]
+    points.append(p3)
+    print(p3)
+
+    # print(points, pred_vals)
+    d2 = tree.applyDT2(p1, p2, pred2[l, k], p3, pred3[n, m], x_test, y_test)
+    testDepth2 = tree.applyDT(points, pred_vals, 2, x_test, y_test) #applyDT2(p1, p2, pred2[l, k], p3, pred3[n, m], x_test, y_test)
+    # print(d2)
+    # print(testDepth2-d2)
+    print(tree.accuracy(y_test, testDepth2))
