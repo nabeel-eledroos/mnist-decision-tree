@@ -82,17 +82,19 @@ class decisionTree:
         if self.depth > 1:
             nodes = queue.Queue()
             nodes.put((i, j))
-            depth_count = 1
-            while depth_count<self.depth:
+            num_splits = (2**(self.depth-1)) - 1
+            print(num_splits)
+            split_count = 0
+            while split_count<num_splits:
                 p = nodes.get()
                 p1, p2 = self.split(p, x, y)
+                split_count += 1
                 print("hey")
                 print(p)
                 print(p1)
                 print(p2)
                 nodes.put(p1)
                 nodes.put(p2)
-                depth_count += 1
 
     def decide(self, n, points, depth, x, y, predictions):
         i = points[0][1]
