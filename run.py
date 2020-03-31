@@ -20,41 +20,18 @@ def loadmat(path):
 if __name__ == '__main__':
     x_train, y_train, x_test, y_test = loadmat('data.mat')
 
-    # tree1 = decisionTree(depth=1)
-    # tree1.fit(x_train, y_train)
-    # testDepth1 = tree1.predict(x_test, y_test)
-    # print(tree1.accuracy(y_test, testDepth1))
+    tree1 = decisionTree(depth=1)
+    tree1.fit(x_train, y_train)
+    testDepth1 = tree1.predict(x_test, y_test)
+    print(tree1.accuracy(y_test, testDepth1))
 
+    # tree2 = decisionTree(depth=2)
+    # tree2.fit(x_train, y_train)
+    # testDepth2 = tree2.predict(x_test, y_test)
+    # print(tree2.accuracy(y_test, testDepth2))
 
-    # ind1 = np.where(x_train[j,i,:]==1)
-    # ind2 = np.where(x_train[j,i,:]==0)
-
-    # sub1x = x_train[:,:,ind1[0]]
-    # sub1y = y_train[ind1[0]]
-
-    # sub2x = x_train[:,:,ind2[0]]
-    # sub2y = y_train[ind2[0]]
-
-    # score2,pred2 = tree.scoreFeatures(sub1x,sub1y)
-
-    # (k,l) = tree.get_point(score2)
-    # p2 = (k,l)
-    # pred_vals[p2] = pred2[l, k]
-    # points.append(p2)
-    # print(p2)
-
-
-    # score3,pred3 = tree.scoreFeatures(sub2x,sub2y)
-    # (m,n) = tree.get_point(score3)
-    # p3 = (m,n)
-    # pred_vals[p3] = pred3[n, m]
-    # points.append(p3)
-    # print(p3)
-    # testDepth2 = tree.applyDT(points, pred_vals, 2, x_test, y_test)
-    # print(tree.accuracy(y_test, testDepth2))
-
-    tree2 = decisionTree(depth=2)
-    tree2.fit(x_train, y_train)
-    testDepth2 = tree2.predict(x_test, y_test)
-    print(tree2.accuracy(y_test, testDepth2))
+    # tree3 = decisionTree(depth=3)
+    # tree3.fit(x_train, y_train)
+    # testDepth3 = tree3.predict(x_test, y_test)
+    # print(tree3.accuracy(y_test, testDepth3))
 
