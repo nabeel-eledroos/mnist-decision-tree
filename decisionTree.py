@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import queue
 
 class decisionTree:
@@ -47,31 +47,34 @@ class decisionTree:
 
     def find_max(self, score):
         m = np.max(score)
-        (i,j) = (np.where(score == m)[1][0], (np.where(score == m)[0][0]))
-        return (i, j)
+        max_points = np.where(score == m)
+        for x in range(0,len(max_points[0])):
+            if (max_points[1][x], max_points[0][x]) not in self.points:
+                return (max_points[1][x], max_points[0][x])
+        return (-1,-1)
 
     def split(self, point, x, y):
         (i, j) = point
-        ind1 = np.where(x[j,i,:]==1)
-        ind2 = np.where(x[j,i,:]==0)
+        ones = np.where(x[j,i,:]==1)
 
-        sub1x = x[:,:,ind1[0]]
-        sub1y = y[ind1[0]]
+        ones_set_x = x[:,:,ones[0]]
+        ones_set_y = y[ones[0]]
 
-        sub2x = x[:,:,ind2[0]]
-        sub2y = y[ind2[0]]
-
-        score1,pred1 = self.scoreFeatures(sub1x,sub1y)
-
-        (k,l) = self.find_max(score1)
-
-        self.pred_vals[(k,l)] = pred1[l, k]
+        ones_score, ones_pred = self.scoreFeatures(ones_set_x,ones_set_y)
+        (k,l) = self.find_max(ones_score)
+        self.pred_vals[(k,l)] = ones_pred[l, k]
         self.points.append((k,l))
 
-        score2,pred2 = self.scoreFeatures(sub2x,sub2y)
-        (m,n) = self.find_max(score2)
-        self.pred_vals[(m,n)] = pred2[n, m]
+        zeros = np.where(x[j,i,:]==0)
+
+        zeros_set_x = x[:,:,zeros[0]]
+        zeros_set_y = y[zeros[0]]
+
+        zeros_score, zeros_pred = self.scoreFeatures(zeros_set_x, zeros_set_y)
+        (m,n) = self.find_max(zeros_score)
+        self.pred_vals[(m,n)] = zeros_pred[n, m]
         self.points.append((m,n))
+
         return (k,l), (m,n)
 
     def fit(self, x, y):
@@ -83,7 +86,6 @@ class decisionTree:
             nodes = queue.Queue()
             nodes.put((i, j))
             num_splits = (2**(self.depth-1)) - 1
-            print(num_splits)
             split_count = 0
             while split_count<num_splits:
                 p = nodes.get()
