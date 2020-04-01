@@ -20,15 +20,15 @@ def loadmat(path):
 if __name__ == '__main__':
     x_train, y_train, x_test, y_test = loadmat('data.mat')
 
-    tree1 = decisionTree(depth=1)
-    tree1.fit(x_train, y_train)
-    testDepth1 = tree1.predict(x_test, y_test)
-    print(tree1.accuracy(y_test, testDepth1))
+    # tree1 = decisionTree(depth=1)
+    # tree1.fit(x_train, y_train)
+    # testDepth1 = tree1.predict(x_test, y_test)
+    # print(tree1.accuracy(y_test, testDepth1))
 
-    # tree2 = decisionTree(depth=2)
-    # tree2.fit(x_train, y_train)
-    # testDepth2 = tree2.predict(x_test, y_test)
-    # print(tree2.accuracy(y_test, testDepth2))
+    tree2 = decisionTree(depth=2, verbose=True)
+    tree2.fit(x_train, y_train)
+    testDepth2 = tree2.predict(x_test, y_test)
+    print(tree2.accuracy(y_test, testDepth2))
 
     # tree3 = decisionTree(depth=3)
     # tree3.fit(x_train, y_train)

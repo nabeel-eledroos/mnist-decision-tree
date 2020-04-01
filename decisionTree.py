@@ -8,9 +8,10 @@ class decisionTree:
     points = []
     depth = 0
 
-    def __init__(self, depth=1):
+    def __init__(self, depth=1, verbose=False):
         self.depth = depth
         self.predictions = np.zeros(200)
+        self.verbose=verbose
 
     def scoreFeatures(self, x, y):
         score = np.zeros((28,28)).astype(int)
@@ -91,10 +92,9 @@ class decisionTree:
                 p = nodes.get()
                 p1, p2 = self.split(p, x, y)
                 split_count += 1
-                print("hey")
-                print(p)
-                print(p1)
-                print(p2)
+                if self.verbose:
+                    print("Splitting " + str(p))
+                    print("\tinto " + str(p1) + " and " + str(p2))
                 nodes.put(p1)
                 nodes.put(p2)
 
